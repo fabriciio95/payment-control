@@ -16,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.CriancaService;
 
 public class MainViewController implements Initializable {
 
@@ -28,7 +29,10 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemCriancasAction() {
-		this.loadView("/gui/ListagemCriancas.fxml", x -> {});
+		this.loadView("/gui/ListagemCriancas.fxml", (ListagemCriancasController controller) -> {
+			controller.setCriancaService(new CriancaService());
+			controller.atualizarListagemCriancas();
+		});
 	}
 	
 	@FXML
