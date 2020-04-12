@@ -19,7 +19,7 @@ public class Main extends Application {
 			ScrollPane scrollPane = loader.load();
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);			
-			mainScene = new Scene(scrollPane, 784, 498);
+			mainScene = new Scene(scrollPane, 941.0, 545.0);
 			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Transporte Escolar");
 			primaryStage.show();

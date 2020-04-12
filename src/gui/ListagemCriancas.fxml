@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="498.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ListagemCriancasController">
+<VBox prefHeight="545.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ListagemCriancasController">
    <children>
       <Label text="Crianças">
          <font>
@@ -24,7 +24,7 @@
       </Label>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
          <items>
-            <AnchorPane prefHeight="30.0" prefWidth="682.0">
+            <AnchorPane prefHeight="30.0" prefWidth="765.0">
                <children>
                 <Button fx:id="btNovaCrianca" layoutY="5.0" mnemonicParsing="false" onAction="#onBtNovaCriancaAction" text="Nova Criança">
                      <font>
@@ -34,19 +34,21 @@
                   <TextField fx:id="txtPesquisa" layoutX="275.0" layoutY="5.0" promptText="Digite algo..." />
                   <ComboBox fx:id="cbPesquisa" layoutX="438.0" layoutY="5.0" prefWidth="150.0" promptText="Selecione" />
                   <Button fx:id="btPesquisa" layoutX="594.0" layoutY="5.0" mnemonicParsing="false" onAction="#onBtPesquisarAction" text="Pesquisar" />
+                  <Button fx:id="btResetarPesquisa" layoutX="680.0" layoutY="5.0" mnemonicParsing="false" onAction="#onBtResetarPesquisaAction" text="Resetar" />
                </children>
             </AnchorPane>
          </items>
       </ToolBar>
       <TableView fx:id="tableViewCrianca" prefHeight="240.0" prefWidth="700.0">
         <columns>
-          <TableColumn fx:id="tableColumnNome" prefWidth="123.0" text="Nome" />
+          <TableColumn fx:id="tableColumnNome" prefWidth="131.0" text="Nome" />
           <TableColumn fx:id="tableColumnResponsavel" prefWidth="145.0" text="Responsável" />
-            <TableColumn fx:id="tableColumnTelefone" prefWidth="141.0" text="Telefone" />
-            <TableColumn fx:id="tableColumnEscola" prefWidth="107.0" text="Escola" />
-            <TableColumn fx:id="tableColumnAno" prefWidth="98.0" text="Ano" />
-            <TableColumn fx:id="tableColumnPeriodo" prefWidth="85.0" text="Período" />
-            <TableColumn prefWidth="84.0" />
+            <TableColumn fx:id="tableColumnTelefone" prefWidth="133.0" text="Telefone" />
+            <TableColumn fx:id="tableColumnEscola" prefWidth="118.0" text="Escola" />
+            <TableColumn fx:id="tableColumnAno" prefWidth="118.0" text="Ano" />
+            <TableColumn fx:id="tableColumnPeriodo" prefWidth="121.0" text="Período" />
+            <TableColumn fx:id="tableColumnEDIT" prefWidth="90.0" />
+            <TableColumn fx:id="tableColumnREMOVE" prefWidth="84.0" />
         </columns>
       </TableView>
    </children>

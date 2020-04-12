@@ -10,5 +10,6 @@ public interface CriancaDao {
 	void update(Crianca obj);
 	void deleteById(Integer id);
 	Crianca findById(Integer id);
+	List<Crianca> pesquisarPor(String filtroBusca, String buscar);
 	List<Crianca> findAll();
 }
