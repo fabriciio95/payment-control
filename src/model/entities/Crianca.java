@@ -84,31 +84,9 @@ public class Crianca implements Serializable {
 		this.telefone = telefone;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((idCrianca == null) ? 0 : idCrianca.hashCode());
-		return result;
-	}
+	
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Crianca other = (Crianca) obj;
-		if (idCrianca == null) {
-			if (other.idCrianca != null)
-				return false;
-		} else if (!idCrianca.equals(other.idCrianca))
-			return false;
-		return true;
-	}
-
+	
 	@Override
 	public String toString() {
 		return "Crianca [idCrianca=" + idCrianca + ", nome=" + nome + ", escola=" + escola + ", anoEscolar="

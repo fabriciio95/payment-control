@@ -76,15 +76,18 @@ public class ListagemCriancasController implements Initializable {
 	
 	@FXML
 	public void onBtPesquisarAction() {
-		System.out.println("onBtPesquisarAction()");
+		if(criancaService == null) {
+			throw new IllegalStateException("Service was null");
+		}
+		List<Crianca> listaCrianca = criancaService.pesquisarCrianca(cbPesquisa.getValue(), txtPesquisa.getText());
+		atualizarListagemCriancas(listaCrianca);
 	}
 	
-	public void atualizarListagemCriancas() {
+	public void atualizarListagemCriancas(List<Crianca> listaCrianca) {
 		if (criancaService == null) {
 			throw new IllegalStateException("CriancaService estava null");
 		}
-		List<Crianca> criancas = criancaService.findAll();
-		CriancaOBSList = FXCollections.observableArrayList(criancas);
+		CriancaOBSList = FXCollections.observableArrayList(listaCrianca);
 		tableViewCrianca.setItems(CriancaOBSList);
 	}
 
