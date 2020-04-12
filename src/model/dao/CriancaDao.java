@@ -6,10 +6,9 @@ import model.entities.Crianca;
 
 public interface CriancaDao {
 	
-	void insert(Crianca obj);
+	Crianca insert(Crianca obj);
 	void update(Crianca obj);
 	void deleteById(Integer id);
-	Crianca findById(Integer id);
 	List<Crianca> pesquisarPor(String filtroBusca, String buscar);
 	List<Crianca> findAll();
 }

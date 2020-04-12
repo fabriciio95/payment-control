@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +22,53 @@ public class CriancaDaoJDBC implements CriancaDao {
 	}
 
 	@Override
-	public void insert(Crianca obj) {
+	public Crianca insert(Crianca obj) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("INSERT INTO cri_crianca (cri_nome,cri_escola,cri_ano_escolar,"
+					+ "cri_responsavel,cri_periodo,cri_telefone ) VALUES (?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
+			st.setString(1, obj.getNome());
+			st.setString(2, obj.getEscola());
+			st.setString(3, obj.getAnoEscolar());
+			st.setString(4, obj.getResponsavel());
+			st.setString(5, obj.getPeriodo());
+			st.setLong(6, obj.getTelefone());
+			int linhasAfetadas = st.executeUpdate();
+			if(linhasAfetadas > 0) {
+				ResultSet rs = st.getGeneratedKeys();
+				if(rs.next()) {
+					obj.setIdCrianca(rs.getInt(1));
+				}
+			}
+			else {
+				throw new DbException("Erro inesperado! Nenhuma linha afetada!");
+			}
+			return obj;
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+		}	
 	}
 
 	@Override
 	public void update(Crianca obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("UPDATE cri_crianca SET cri_nome = ?, cri_escola = ?,"
+					+ "cri_ano_escolar = ?, cri_responsavel = ?, cri_periodo = ?, cri_telefone = ? WHERE cri_cod_crianca = ?; ");
+			st.setString(1, obj.getNome());
+			st.setString(2, obj.getEscola());
+			st.setString(3, obj.getAnoEscolar());
+			st.setString(4, obj.getResponsavel());
+			st.setString(5, obj.getPeriodo());
+			st.setLong(6, obj.getTelefone());
+			st.execute();
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+		}
 
 	}
 
@@ -43,11 +85,6 @@ public class CriancaDaoJDBC implements CriancaDao {
 
 	}
 
-	@Override
-	public Crianca findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Crianca> findAll() {
@@ -119,4 +156,5 @@ public class CriancaDaoJDBC implements CriancaDao {
 		}
 		return criancas;
 	}
+	
 }

@@ -85,7 +85,6 @@ public class Crianca implements Serializable {
 	}
 
 	
-
 	
 	@Override
 	public String toString() {

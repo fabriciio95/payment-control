@@ -19,6 +19,15 @@ public class CriancaService {
 		return criancas;
 	}
 	
+	public void salvarOuAtualizar(Crianca crianca) {
+		if(crianca.getIdCrianca() == null) {
+			criancaDao.insert(crianca);
+		}
+		else {
+			criancaDao.update(crianca);
+		}
+	}
+	
 	public void remover(Crianca obj) {
 		criancaDao.deleteById(obj.getIdCrianca());
 	}

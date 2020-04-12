@@ -136,7 +136,7 @@ public class ListagemCriancasController implements Initializable {
 				}
 				setGraphic(button);
 				button.setOnAction(
-						event -> createDialogForm(obj, "/gui/novaCriancaFormulario.fxml", Utils.currentStage(event)));
+						event -> createDialogForm(obj, "/gui/CriancaFormulario.fxml", Utils.currentStage(event)));
 			}
 		});
 	}
