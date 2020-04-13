@@ -19,12 +19,14 @@ public class CriancaService {
 		return criancas;
 	}
 	
-	public void salvarOuAtualizar(Crianca crianca) {
+	public Crianca salvarOuAtualizar(Crianca crianca) {
 		if(crianca.getIdCrianca() == null) {
-			criancaDao.insert(crianca);
+			crianca = criancaDao.insert(crianca);
+			return crianca;
 		}
 		else {
 			criancaDao.update(crianca);
+			return null;
 		}
 	}
 	

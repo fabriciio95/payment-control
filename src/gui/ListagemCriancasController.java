@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -7,13 +8,18 @@ import java.util.ResourceBundle;
 
 import application.Main;
 import db.DbIntegrityException;
+import gui.listeners.DataChangeListener;
 import gui.utils.Alerts;
+import gui.utils.Constraints;
 import gui.utils.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -23,11 +29,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Crianca;
 import model.services.CriancaService;
 
-public class ListagemCriancasController implements Initializable {
+public class ListagemCriancasController implements Initializable, DataChangeListener {
 
 	@FXML
 	private Button btNovaCrianca;
@@ -63,6 +71,7 @@ public class ListagemCriancasController implements Initializable {
 
 	private CriancaService criancaService;
 
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeNodes();
@@ -78,6 +87,7 @@ public class ListagemCriancasController implements Initializable {
 		tableColumnPeriodo.setCellValueFactory(new PropertyValueFactory<>("periodo"));
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewCrianca.prefHeightProperty().bind(stage.heightProperty());
+		Constraints.setTextFieldMaxLength(txtPesquisa, 100);
 	}
 
 	public void setCriancaService(CriancaService criancaService) {
@@ -85,14 +95,22 @@ public class ListagemCriancasController implements Initializable {
 	}
 
 	@FXML
-	public void onBtNovaCriancaAction() {
-		System.out.println("onBtNovaCriancaAction()");
+	public void onBtNovaCriancaAction(ActionEvent event) {
+		Stage parentStage = Utils.currentStage(event);
+		Crianca obj = new Crianca();
+		createDialogForm(obj, "/gui/CriancaFormulario.fxml", parentStage);
 	}
 
 	@FXML
 	public void onBtPesquisarAction() {
 		if (criancaService == null) {
 			throw new IllegalStateException("CriancaService estava null");
+		}
+		if(cbPesquisa.getValue() == null) {
+			Alerts.showAlert("Erro", null, "Nenhuma opção de pesquisa escolhida, por favor selecione uma opção e tente novamente!", AlertType.ERROR);
+		}
+		if(txtPesquisa.getText() == null || txtPesquisa.getText().equals("")) {
+			Alerts.showAlert("Erro", null, "Campo de pesquisa vazio, digite algo no campo para realizar a pesquisa!", AlertType.ERROR);
 		}
 		List<Crianca> listaCrianca = criancaService.pesquisarCrianca(cbPesquisa.getValue(), txtPesquisa.getText());
 		atualizarListagemCriancas(listaCrianca);
@@ -119,7 +137,26 @@ public class ListagemCriancasController implements Initializable {
 	}
 	
 	private void createDialogForm(Crianca obj, String absoluteName, Stage parentStage) {
-		
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+			Pane pane = loader.load();
+			CriancaFormularioController controller = loader.getController();
+			controller.setCrianca(obj);
+			controller.setCriancaService(new CriancaService());
+			controller.atualizarDadosFormulario();
+			controller.subscribeDataChangeListener(this);
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Entre com os dados da criança");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+			Alerts.showAlert("IO Exception", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	private void initEditButtons() {
@@ -174,6 +211,13 @@ public class ListagemCriancasController implements Initializable {
 				Alerts.showAlert("Error removing object", null, e.getMessage(), AlertType.ERROR);
 			}
 		}
+		
+	}
+
+	@Override
+	public void onDataChanged() {
+		List<Crianca> criancas = criancaService.findAll();
+		atualizarListagemCriancas(criancas);
 		
 	}
 

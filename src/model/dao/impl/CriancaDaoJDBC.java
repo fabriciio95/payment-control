@@ -24,6 +24,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 	@Override
 	public Crianca insert(Crianca obj) {
 		PreparedStatement st = null;
+		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement("INSERT INTO cri_crianca (cri_nome,cri_escola,cri_ano_escolar,"
 					+ "cri_responsavel,cri_periodo,cri_telefone ) VALUES (?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
@@ -35,7 +36,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 			st.setLong(6, obj.getTelefone());
 			int linhasAfetadas = st.executeUpdate();
 			if(linhasAfetadas > 0) {
-				ResultSet rs = st.getGeneratedKeys();
+				rs = st.getGeneratedKeys();
 				if(rs.next()) {
 					obj.setIdCrianca(rs.getInt(1));
 				}
@@ -48,6 +49,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 			throw new DbException(e.getMessage());
 		}finally {
 			DB.closeStatement(st);
+			DB.closeResultSet(rs);
 		}	
 	}
 
@@ -63,6 +65,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 			st.setString(4, obj.getResponsavel());
 			st.setString(5, obj.getPeriodo());
 			st.setLong(6, obj.getTelefone());
+			st.setInt(7, obj.getIdCrianca());
 			st.execute();
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
@@ -81,6 +84,8 @@ public class CriancaDaoJDBC implements CriancaDao {
 			st.execute();
 		}catch(SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
 		}
 
 	}
@@ -138,6 +143,9 @@ public class CriancaDaoJDBC implements CriancaDao {
 			return criancas;
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
 		}
 	}
 

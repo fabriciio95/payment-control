@@ -1,21 +1,27 @@
 package gui;
 
-import java.awt.Label;
+
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.utils.Alerts;
 import gui.utils.Constraints;
 import gui.utils.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Crianca;
 import model.exceptions.ValidationException;
@@ -23,6 +29,7 @@ import model.services.CriancaService;
 
 public class CriancaFormularioController implements Initializable {
 	
+	private List<DataChangeListener> dataChangeListeners = new ArrayList<DataChangeListener>();
 	private Crianca entidade;
 	private CriancaService criancaService;
 	@FXML
@@ -37,6 +44,7 @@ public class CriancaFormularioController implements Initializable {
 	private TextField txtTelefone;
 	@FXML
 	private ComboBox<String> comboBoxPeriodo;
+	private ObservableList<String> OBScbPeriodo = FXCollections.observableArrayList("Manhã", "Tarde", "Integral");
 	@FXML
 	private Button btSalvar;
 	@FXML
@@ -51,11 +59,14 @@ public class CriancaFormularioController implements Initializable {
 	private Label labelErrorResponsavel;
 	@FXML
 	private Label labelErrorTelefone;
-		
+	@FXML
+	private Label labelErrorCBPeriodo;
+	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeNodes();
+		this.comboBoxPeriodo.setItems(OBScbPeriodo);
 	}
 	
 	
@@ -68,9 +79,12 @@ public class CriancaFormularioController implements Initializable {
 			throw new IllegalStateException("CriancaService estava null");
 		}
 		try {
+			Integer id = entidade.getIdCrianca();
 			entidade = getDadosFormulario();
+			entidade.setIdCrianca(id);
 			criancaService.salvarOuAtualizar(entidade);
-			Utils.currentStage(event);
+			notifyDataChangeListeners();
+			Utils.currentStage(event).close();
 		}
 		catch(DbException e) {
 			Alerts.showAlert("Error saving object", null, e.getMessage(), AlertType.ERROR);
@@ -116,22 +130,17 @@ public class CriancaFormularioController implements Initializable {
 		Constraints.setTextFieldMaxLength(txtAnoEscolar, 50);
 		Constraints.setTextFieldMaxLength(txtResponsavel, 100);
 		Constraints.setTextFieldMaxLength(txtTelefone, 15);
+		Constraints.setTextFieldInteger(txtTelefone);
 	}
 	
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
-		
-		if(fields.contains("nome")) {
-			this.labelErrorNome.setText(errors.get("nome"));
-		}else if(fields.contains("escola")) {
-			this.labelErrorNome.setText(errors.get("escola"));
-		}else if(fields.contains("anoEscolar")) {
-			this.labelErrorNome.setText(errors.get("anoEscolar"));
-		}else if(fields.contains("responsavel")) {
-			this.labelErrorNome.setText(errors.get("responsavel"));
-		}else if(fields.contains("telefone")) {
-			this.labelErrorNome.setText(errors.get("telefone"));
-		}
+		this.labelErrorNome.setText(fields.contains("nome") ? errors.get("nome") : "");
+		this.labelErrorEscola.setText(fields.contains("escola") ? errors.get("escola") : "");
+		this.labelErrorAnoEscolar.setText(fields.contains("anoEscolar") ? errors.get("anoEscolar") : "");
+		this.labelErrorResponsavel.setText(fields.contains("responsavel") ? errors.get("responsavel") : "");
+		this.labelErrorTelefone.setText(fields.contains("telefone") ? errors.get("telefone") : "");
+		this.labelErrorCBPeriodo.setText(fields.contains("periodo") ? errors.get("periodo") : "");
 	}
 	
 	private Crianca getDadosFormulario() {
@@ -144,20 +153,37 @@ public class CriancaFormularioController implements Initializable {
 		if(this.txtEscola.getText() == null || this.txtEscola.getText().trim().equals("")) {
 			validationException.addError("escola", "Campo não pode estar vazio");
 		}
-		obj.setNome(this.txtEscola.getText());
+		obj.setEscola(this.txtEscola.getText());
 		if(this.txtAnoEscolar.getText() == null || this.txtAnoEscolar.getText().trim().equals("")) {
 			validationException.addError("anoEscolar", "Campo não pode estar vazio");
 		}
-		obj.setNome(this.txtAnoEscolar.getText());
+		obj.setAnoEscolar(this.txtAnoEscolar.getText());
 		if(this.txtResponsavel.getText() == null || this.txtResponsavel.getText().trim().equals("")) {
 			validationException.addError("responsavel", "Campo não pode estar vazio");
 		}
-		obj.setNome(this.txtResponsavel.getText());
+		obj.setResponsavel(this.txtResponsavel.getText());
+		if(Utils.tryParseToLong(this.txtTelefone.getText()) == null) {
+			validationException.addError("telefone", "Campo não pode estar vazio");
+		}
 		obj.setTelefone(Utils.tryParseToLong(this.txtTelefone.getText()));
+		if(this.comboBoxPeriodo.getValue() == null) {
+			validationException.addError("periodo", "Campo não pode estar vazio");
+		}
+		obj.setPeriodo(comboBoxPeriodo.getValue());
 		
 		if(validationException.getErrors().size() > 0) {
 			throw validationException;
 		}
 		return obj;
+	}
+	
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		this.dataChangeListeners.add(listener);
+	}
+	
+	private void notifyDataChangeListeners() {
+		for (DataChangeListener listener : dataChangeListeners) {
+			listener.onDataChanged();
+		}
 	}
 }
