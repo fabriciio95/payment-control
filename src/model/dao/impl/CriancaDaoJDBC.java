@@ -108,6 +108,33 @@ public class CriancaDaoJDBC implements CriancaDao {
 		}
 
 	}
+	
+	@Override
+	public Crianca findById(Integer id) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT * FROM cri_crianca WHERE cri_cod_crianca = ?;");
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			Crianca crianca = new Crianca();
+			if(rs.next()) {
+				crianca.setIdCrianca(rs.getInt("cri_cod_crianca"));
+				crianca.setNome(rs.getString("cri_nome"));
+				crianca.setEscola(rs.getString("cri_escola"));
+				crianca.setAnoEscolar(rs.getString("cri_ano_escolar"));
+				crianca.setResponsavel(rs.getString("cri_responsavel"));
+				crianca.setPeriodo(rs.getString("cri_periodo"));
+				crianca.setTelefone(rs.getLong("cri_telefone"));
+			}
+			return crianca;
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
 
 	@Override
 	public List<Crianca> pesquisarPor(String filtroBusca, String buscar) {

@@ -1,6 +1,7 @@
 package model.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import model.dao.CriancaDao;
 import model.dao.DaoFactory;
@@ -32,5 +33,16 @@ public class CriancaService {
 	
 	public void remover(Crianca obj) {
 		criancaDao.deleteById(obj.getIdCrianca());
+	}
+	
+	public Crianca recuperarCriancaPorId(Integer id) {
+		//return criancaDao.findById(id);
+		List<Crianca> criancas = criancaDao.findAll();
+		Optional<Crianca> criancaCapturado = criancas.stream().filter(crianca -> crianca.getIdCrianca().equals(id)).findFirst();
+		if(criancaCapturado.isPresent()) {
+			return criancaCapturado.get();
+		}else {
+			return null;
+		}
 	}
 }

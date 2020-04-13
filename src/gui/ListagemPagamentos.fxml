@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="545.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ListagemPagamentosController">
+   <children>
+      <Label text="Pagamentos">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets left="5.0" top="5.0" />
+         </VBox.margin>
+      </Label>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+         <items>
+            <AnchorPane prefHeight="30.0" prefWidth="917.0">
+               <children>
+                  <Button fx:id="btNovoPagamento" layoutY="3.0" mnemonicParsing="false" text="Novo Pagamento" />
+                  <TextField fx:id="txtPesquisa" layoutX="423.0" layoutY="4.0" promptText="Digite algo..." />
+                  <ComboBox fx:id="comboBoxPesquisa" layoutX="587.0" layoutY="4.0" prefWidth="150.0" promptText="Selecione" />
+                  <Button fx:id="btPesquisar" layoutX="751.0" layoutY="4.0" mnemonicParsing="false" text="Pesquisar" />
+                  <Button fx:id="resetarPesquisa" layoutX="833.0" layoutY="4.0" mnemonicParsing="false" text="Resetar" />
+               </children>
+            </AnchorPane>
+         </items>
+      </ToolBar>
+      <TableView fx:id="tableViewPagamento" prefHeight="477.0" prefWidth="941.0">
+        <columns>
+          <TableColumn fx:id="tableColumnNomeCrianca" prefWidth="175.0" text="Criança" />
+          <TableColumn fx:id="tableColumnResponsavel" prefWidth="254.0" text="Responsável" />
+            <TableColumn fx:id="tableColumnData" minWidth="0.0" prefWidth="152.0" text="Data" />
+            <TableColumn fx:id="tableColumnValorPago" prefWidth="153.0" text="Valor Pago" />
+            <TableColumn fx:id="tableColumnEDIT" prefWidth="105.0" />
+            <TableColumn fx:id="tableColumnREMOVE" prefWidth="98.0" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>

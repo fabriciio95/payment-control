@@ -9,6 +9,7 @@ public interface CriancaDao {
 	Crianca insert(Crianca obj);
 	void update(Crianca obj);
 	void deleteById(Integer id);
+	Crianca findById(Integer id);
 	List<Crianca> pesquisarPor(String filtroBusca, String buscar);
 	List<Crianca> findAll();
 }

@@ -18,7 +18,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import model.entities.Crianca;
+import model.entities.Pagamento;
 import model.services.CriancaService;
+import model.services.PagamentoService;
 
 public class MainViewController implements Initializable {
 
@@ -45,7 +47,12 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemPagamentosAction() {
-		System.out.println("onMenuItemPagamentosAction()");
+		this.loadView("/gui/ListagemPagamentos.fxml", (ListagemPagamentosController controller) -> {
+			PagamentoService pagamentoService = new PagamentoService();
+			controller.setPagamentoService(pagamentoService);
+			List<Pagamento> listaPagamentos = pagamentoService.findAll();
+			controller.atualizarListagemPagamentos(listaPagamentos);
+		});
 	}
 	
 	@FXML
