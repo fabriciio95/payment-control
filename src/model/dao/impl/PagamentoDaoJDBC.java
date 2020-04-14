@@ -108,6 +108,8 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 				CriancaService criancaService = new CriancaService();
 				Crianca crianca = criancaService.recuperarCriancaPorId(rs.getInt("cri_cod_crianca"));
 				pagamento.setCrianca(crianca);
+				pagamento.setNomeCrianca(crianca.getNome());
+				pagamento.setResponsavelCrianca(crianca.getResponsavel());
 				pagamentos.add(pagamento);
 			}
 			return pagamentos;

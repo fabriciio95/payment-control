@@ -1,8 +1,10 @@
 package model.services;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import db.DbException;
 import model.dao.CriancaDao;
 import model.dao.DaoFactory;
 import model.entities.Crianca;
@@ -32,7 +34,12 @@ public class CriancaService {
 	}
 	
 	public void remover(Crianca obj) {
-		criancaDao.deleteById(obj.getIdCrianca());
+		try {
+			criancaDao.deleteById(obj.getIdCrianca());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DbException(e.getMessage());
+		}
 	}
 	
 	public Crianca recuperarCriancaPorId(Integer id) {

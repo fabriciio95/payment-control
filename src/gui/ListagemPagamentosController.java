@@ -60,8 +60,8 @@ public class ListagemPagamentosController implements Initializable {
 	}
 	
 	private void initializeNodes() {
-		tableColumnNomeCrianca.setCellValueFactory(new PropertyValueFactory<>("nome"));
-		tableColumnResponsavel.setCellValueFactory(new PropertyValueFactory<>("responsavel"));
+		tableColumnNomeCrianca.setCellValueFactory(new PropertyValueFactory<>("nomeCrianca"));
+		tableColumnResponsavel.setCellValueFactory(new PropertyValueFactory<>("responsavelCrianca"));
 		tableColumnData.setCellValueFactory(new PropertyValueFactory<>("data"));
 		Utils.formatTableColumnDate(tableColumnData, "dd/MM/yyyy");
 		tableColumnValorPago.setCellValueFactory(new PropertyValueFactory<>("valorPago"));
@@ -82,5 +82,7 @@ public class ListagemPagamentosController implements Initializable {
 		this.pagamentoOBSList = FXCollections.observableArrayList(pagamentos);
 		this.tableViewPagamento.setItems(pagamentoOBSList);
 	}
+	
+	
 
 }

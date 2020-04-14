@@ -197,7 +197,7 @@ public class ListagemCriancasController implements Initializable, DataChangeList
 	}
 	
 	private void removeEntity(Crianca obj) {
-		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Você tem certeza que deseja excluir? ");
+		Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "ATENÇÃO!!!" ,"Será excluído todos os registros de " + obj.getNome() + ", inclusive os de pagamentos, você tem certeza que deseja fazer isso? ");
 		
 		if(result.get() == ButtonType.OK) {
 			if(criancaService == null) {

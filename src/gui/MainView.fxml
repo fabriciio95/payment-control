@@ -27,7 +27,7 @@
 						</Menu>
 					</menus>
 				</MenuBar>
-            <ImageView fitHeight="459.0" fitWidth="645.0">
+            <ImageView fitHeight="459.0" fitWidth="645.0" nodeOrientation="INHERIT">
                <image>
                   <Image url="@../../../van-escolar-van.jpg" />
                </image>

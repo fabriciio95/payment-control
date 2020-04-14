@@ -44,6 +44,9 @@
             <TableColumn fx:id="tableColumnEDIT" prefWidth="105.0" />
             <TableColumn fx:id="tableColumnREMOVE" prefWidth="98.0" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </children>
 </VBox>

@@ -7,6 +7,8 @@ public class Pagamento {
 	private Integer idPagamento;
 	private Double valorPago;
 	private Date data;
+	private String nomeCrianca;
+	private String responsavelCrianca;
 	private Crianca crianca;
 	
 	public Pagamento() {
@@ -76,10 +78,27 @@ public class Pagamento {
 		return true;
 	}
 
+	public String getResponsavelCrianca() {
+		return responsavelCrianca;
+	}
+
+	public void setResponsavelCrianca(String responsavelCrianca) {
+		this.responsavelCrianca = responsavelCrianca;
+	}
+
+	public String getNomeCrianca() {
+		return nomeCrianca;
+	}
+
+	public void setNomeCrianca(String nomeCrianca) {
+		this.nomeCrianca = nomeCrianca;
+	}
+
 	@Override
 	public String toString() {
-		return "Pagamento [idPagamento=" + idPagamento + ", valorPago=" + valorPago + ", data=" + data + ", crianca="
-				+ crianca + "]";
+		return "Pagamento [idPagamento=" + idPagamento + ", valorPago=" + valorPago + ", data=" + data
+				+ ", nomeCrianca=" + nomeCrianca + ", responsavelCrianca=" + responsavelCrianca + ", crianca=" + crianca
+				+ "]";
 	}
 
 	

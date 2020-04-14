@@ -50,6 +50,9 @@
             <TableColumn fx:id="tableColumnEDIT" prefWidth="90.0" />
             <TableColumn fx:id="tableColumnREMOVE" prefWidth="84.0" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </children>
 </VBox>

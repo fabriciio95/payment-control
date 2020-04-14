@@ -26,8 +26,10 @@ public class CriancaDaoJDBC implements CriancaDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("INSERT INTO cri_crianca (cri_nome,cri_escola,cri_ano_escolar,"
-					+ "cri_responsavel,cri_periodo,cri_telefone ) VALUES (?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
+			st = conn.prepareStatement(
+					"INSERT INTO cri_crianca (cri_nome,cri_escola,cri_ano_escolar,"
+							+ "cri_responsavel,cri_periodo,cri_telefone ) VALUES (?,?,?,?,?,?);",
+					Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, obj.getNome());
 			st.setString(2, obj.getEscola());
 			st.setString(3, obj.getAnoEscolar());
@@ -35,22 +37,21 @@ public class CriancaDaoJDBC implements CriancaDao {
 			st.setString(5, obj.getPeriodo());
 			st.setLong(6, obj.getTelefone());
 			int linhasAfetadas = st.executeUpdate();
-			if(linhasAfetadas > 0) {
+			if (linhasAfetadas > 0) {
 				rs = st.getGeneratedKeys();
-				if(rs.next()) {
+				if (rs.next()) {
 					obj.setIdCrianca(rs.getInt(1));
 				}
-			}
-			else {
+			} else {
 				throw new DbException("Erro inesperado! Nenhuma linha afetada!");
 			}
 			return obj;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}finally {
+		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
-		}	
+		}
 	}
 
 	@Override
@@ -67,9 +68,9 @@ public class CriancaDaoJDBC implements CriancaDao {
 			st.setLong(6, obj.getTelefone());
 			st.setInt(7, obj.getIdCrianca());
 			st.execute();
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}finally {
+		} finally {
 			DB.closeStatement(st);
 		}
 
@@ -78,19 +79,29 @@ public class CriancaDaoJDBC implements CriancaDao {
 	@Override
 	public void deleteById(Integer id) {
 		PreparedStatement st = null;
+		PreparedStatement st2 = null;
 		try {
-			st = conn.prepareStatement("DELETE FROM cri_crianca WHERE cri_cod_crianca = ?;");
+			conn.setAutoCommit(false);
+			st = conn.prepareStatement("DELETE FROM pag_pagamento WHERE cri_cod_crianca = ?;");
 			st.setInt(1, id);
-			st.execute();
+			st.executeUpdate();
+			st2 = conn.prepareStatement("DELETE FROM cri_crianca WHERE cri_cod_crianca = ?;");
+			st2.setInt(1, id);
+			st2.executeUpdate();
+			conn.commit();
 		}catch(SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			throw new DbException(e.getMessage());
 		}finally {
 			DB.closeStatement(st);
+			DB.closeStatement(st2);
 		}
-
 	}
-
-
+	
 	@Override
 	public List<Crianca> findAll() {
 		PreparedStatement st = null;
@@ -108,7 +119,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 		}
 
 	}
-	
+
 	@Override
 	public Crianca findById(Integer id) {
 		PreparedStatement st = null;
@@ -118,7 +129,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			Crianca crianca = new Crianca();
-			if(rs.next()) {
+			if (rs.next()) {
 				crianca.setIdCrianca(rs.getInt("cri_cod_crianca"));
 				crianca.setNome(rs.getString("cri_nome"));
 				crianca.setEscola(rs.getString("cri_escola"));
@@ -128,9 +139,9 @@ public class CriancaDaoJDBC implements CriancaDao {
 				crianca.setTelefone(rs.getLong("cri_telefone"));
 			}
 			return crianca;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}finally {
+		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
@@ -148,19 +159,19 @@ public class CriancaDaoJDBC implements CriancaDao {
 				st.setString(1, buscar);
 				rs = st.executeQuery();
 				criancas = executeQueryRS(rs);
-			}else if (filtroBusca.equals("Responsável")) {
+			} else if (filtroBusca.equals("Responsável")) {
 				st = conn.prepareStatement(
 						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_responsavel) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY cri_responsavel;");
 				st.setString(1, buscar);
 				rs = st.executeQuery();
 				criancas = executeQueryRS(rs);
-			}else if (filtroBusca.equals("Período")) {
+			} else if (filtroBusca.equals("Período")) {
 				st = conn.prepareStatement(
 						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_periodo) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY cri_periodo;");
 				st.setString(1, buscar);
 				rs = st.executeQuery();
 				criancas = executeQueryRS(rs);
-			}else if (filtroBusca.equals("Escola")) {
+			} else if (filtroBusca.equals("Escola")) {
 				st = conn.prepareStatement(
 						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_escola) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY cri_escola;");
 				st.setString(1, buscar);
@@ -170,7 +181,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 			return criancas;
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}finally {
+		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
@@ -191,5 +202,5 @@ public class CriancaDaoJDBC implements CriancaDao {
 		}
 		return criancas;
 	}
-	
+
 }
