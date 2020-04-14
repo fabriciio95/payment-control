@@ -59,26 +59,41 @@
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
             <Label fx:id="labelErrorEscola" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
             <Label fx:id="labelErrorAnoEscolar" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
             <Label fx:id="labelErrorResponsavel" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
             <Label fx:id="labelErrorTelefone" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="5.0" />
                </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Label>
             <ComboBox fx:id="comboBoxPeriodo" prefHeight="25.0" prefWidth="139.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label fx:id="labelErrorCBPeriodo" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5">

@@ -147,27 +147,27 @@ public class CriancaFormularioController implements Initializable {
 		Crianca obj = new Crianca();
 		ValidationException validationException = new ValidationException("Validation Error");
 		if(this.txtNome.getText() == null || this.txtNome.getText().trim().equals("")) {
-			validationException.addError("nome", "Campo não pode estar vazio");
+			validationException.addError("nome", "*Campo não pode estar vazio");
 		}
 		obj.setNome(this.txtNome.getText());
 		if(this.txtEscola.getText() == null || this.txtEscola.getText().trim().equals("")) {
-			validationException.addError("escola", "Campo não pode estar vazio");
+			validationException.addError("escola", "*Campo não pode estar vazio");
 		}
 		obj.setEscola(this.txtEscola.getText());
 		if(this.txtAnoEscolar.getText() == null || this.txtAnoEscolar.getText().trim().equals("")) {
-			validationException.addError("anoEscolar", "Campo não pode estar vazio");
+			validationException.addError("anoEscolar", "*Campo não pode estar vazio");
 		}
 		obj.setAnoEscolar(this.txtAnoEscolar.getText());
 		if(this.txtResponsavel.getText() == null || this.txtResponsavel.getText().trim().equals("")) {
-			validationException.addError("responsavel", "Campo não pode estar vazio");
+			validationException.addError("responsavel", "*Campo não pode estar vazio");
 		}
 		obj.setResponsavel(this.txtResponsavel.getText());
 		if(Utils.tryParseToLong(this.txtTelefone.getText()) == null) {
-			validationException.addError("telefone", "Campo não pode estar vazio");
+			validationException.addError("telefone", "*Campo não pode estar vazio");
 		}
 		obj.setTelefone(Utils.tryParseToLong(this.txtTelefone.getText()));
 		if(this.comboBoxPeriodo.getValue() == null) {
-			validationException.addError("periodo", "Campo não pode estar vazio");
+			validationException.addError("periodo", "*Campo não pode estar vazio");
 		}
 		obj.setPeriodo(comboBoxPeriodo.getValue());
 		

@@ -29,4 +29,9 @@ public class PagamentoService {
 		pagamentoDao.deleteById(pagamento.getIdPagamento());
 	}
 	
+	public List<Pagamento> pesquisarCrianca(String filtroBusca, String buscar){
+		List<Pagamento> pagamentos = pagamentoDao.pesquisarPor(filtroBusca, buscar);
+		return pagamentos;
+	}
+	
 }

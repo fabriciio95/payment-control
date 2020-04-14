@@ -26,11 +26,11 @@
          <items>
             <AnchorPane prefHeight="30.0" prefWidth="917.0">
                <children>
-                  <Button fx:id="btNovoPagamento" layoutY="3.0" mnemonicParsing="false" text="Novo Pagamento" />
+                  <Button fx:id="btNovoPagamento" layoutY="3.0" mnemonicParsing="false" onAction="#btNovoPagamentoOnAction" text="Novo Pagamento" />
                   <TextField fx:id="txtPesquisa" layoutX="423.0" layoutY="4.0" promptText="Digite algo..." />
                   <ComboBox fx:id="comboBoxPesquisa" layoutX="587.0" layoutY="4.0" prefWidth="150.0" promptText="Selecione" />
-                  <Button fx:id="btPesquisar" layoutX="751.0" layoutY="4.0" mnemonicParsing="false" text="Pesquisar" />
-                  <Button fx:id="resetarPesquisa" layoutX="833.0" layoutY="4.0" mnemonicParsing="false" text="Resetar" />
+                  <Button fx:id="btPesquisar" layoutX="751.0" layoutY="4.0" mnemonicParsing="false" onAction="#btPesquisarOnAction" text="Pesquisar" />
+                  <Button fx:id="resetarPesquisa" layoutX="833.0" layoutY="4.0" mnemonicParsing="false" onAction="#btResetarPesquisaOnAction" text="Resetar" />
                </children>
             </AnchorPane>
          </items>

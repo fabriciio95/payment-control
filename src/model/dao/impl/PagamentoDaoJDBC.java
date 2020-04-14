@@ -88,8 +88,53 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 
 	@Override
 	public List<Pagamento> pesquisarPor(String filtroBusca, String buscar) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Pagamento> pagamentos = new ArrayList<Pagamento>();
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			if(filtroBusca.equals("Criança")) {
+			st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_data,"
+					+ " pag.pag_valor_pago FROM cri_crianca cri INNER JOIN pag_pagamento"
+					+ " pag ON cri.cri_cod_crianca = pag.cri_cod_crianca and LOWER(cri.cri_nome)"
+					+ " LIKE LOWER(CONCAT('%',?,'%')); ");
+			st.setString(1, buscar);
+			rs = st.executeQuery();
+			pagamentos = executeQueryRS(rs);
+			} else if(filtroBusca.equals("Responsável")) {
+				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_data,"
+						+ " pag.pag_valor_pago FROM cri_crianca cri INNER JOIN pag_pagamento"
+						+ " pag ON cri.cri_cod_crianca = pag.cri_cod_crianca and LOWER(cri.cri_responsavel)"
+						+ " LIKE LOWER(CONCAT('%',?,'%')); ");
+				st.setString(1, buscar);
+				rs = st.executeQuery();
+				pagamentos = executeQueryRS(rs);
+			} else if(filtroBusca.equals("Mês")) {
+				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_data, pag.pag_valor_pago FROM cri_crianca cri INNER JOIN pag_pagamento pag ON cri.cri_cod_crianca = pag.cri_cod_crianca and MONTH(pag.pag_data) = ?;");
+				st.setInt(1, Integer.parseInt(buscar));
+				rs = st.executeQuery();
+				pagamentos = executeQueryRS(rs);
+			}
+			return pagamentos;
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
+
+	private List<Pagamento> executeQueryRS(ResultSet rs) throws SQLException {
+		List<Pagamento> pagamentos = new ArrayList<Pagamento>();
+		while(rs.next()) {
+			Pagamento pagamento = new Pagamento();
+			pagamento.setNomeCrianca(rs.getString("cri_nome"));
+			pagamento.setResponsavelCrianca(rs.getString("cri_responsavel"));
+			pagamento.setData(rs.getDate("pag_data"));
+			pagamento.setValorPago(rs.getDouble("pag_valor_pago"));
+			pagamentos.add(pagamento);
+		}
+		
+		return pagamentos;
 	}
 
 	@Override
