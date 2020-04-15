@@ -46,9 +46,9 @@ public class Utils {
 				@Override
 				protected void updateItem(Date item, boolean empty) {
 					super.updateItem(item, empty);
-					if (empty) {
+					if (empty || item == null) {
 						setText(null);
-					} else {
+					}else {
 						setText(sdf.format(item));
 					}
 				}
@@ -57,7 +57,7 @@ public class Utils {
 		});
 	}
 
-	public String formatarValor(Double valor) {
+	public static String formatarValor(Double valor) {
 		NumberFormat formatter = NumberFormat.getInstance(new Locale("pt"));
 		formatter.setMaximumFractionDigits(2);
 		formatter.setMinimumFractionDigits(2);

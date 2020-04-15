@@ -109,7 +109,9 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 				rs = st.executeQuery();
 				pagamentos = executeQueryRS(rs);
 			} else if(filtroBusca.equals("Mês")) {
-				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_data, pag.pag_valor_pago FROM cri_crianca cri INNER JOIN pag_pagamento pag ON cri.cri_cod_crianca = pag.cri_cod_crianca and MONTH(pag.pag_data) = ?;");
+				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_data,"
+						+ " pag.pag_valor_pago FROM cri_crianca cri LEFT JOIN pag_pagamento pag"
+						+ " ON cri.cri_cod_crianca = pag.cri_cod_crianca and MONTH(pag.pag_data) = ?;");
 				st.setInt(1, Integer.parseInt(buscar));
 				rs = st.executeQuery();
 				pagamentos = executeQueryRS(rs);

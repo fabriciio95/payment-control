@@ -9,12 +9,14 @@ import java.util.ResourceBundle;
 
 import application.Main;
 import db.DbIntegrityException;
+import gui.listeners.DataChangeListener;
 import gui.utils.Alerts;
 import gui.utils.Constraints;
 import gui.utils.Utils;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,9 +35,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Crianca;
 import model.entities.Pagamento;
+import model.services.CriancaService;
 import model.services.PagamentoService;
 
-public class ListagemPagamentosController implements Initializable {
+public class ListagemPagamentosController implements Initializable, DataChangeListener {
 	 
 	@FXML
 	private Button btNovoPagamento;
@@ -126,8 +129,10 @@ public class ListagemPagamentosController implements Initializable {
 	}
 	
 	@FXML
-	public void btNovoPagamentoOnAction() {
-		System.out.println("btNovoPagamentoOnAction()");
+	public void btNovoPagamentoOnAction(ActionEvent event) {
+		Stage parentStage = Utils.currentStage(event);
+		Pagamento obj = new Pagamento();
+		createDialogForm(obj, "/gui/PagamentoFormulario.fxml", parentStage);
 	}
 
 	private void initEditButtons() {
@@ -139,6 +144,9 @@ public class ListagemPagamentosController implements Initializable {
 			protected void updateItem(Pagamento obj, boolean empty) {
 				super.updateItem(obj, empty);
 				if (obj == null) {
+					setGraphic(null);
+					return;
+				}else if(obj.getData() == null) {
 					setGraphic(null);
 					return;
 				}
@@ -158,6 +166,9 @@ public class ListagemPagamentosController implements Initializable {
 			protected void updateItem(Pagamento obj, boolean empty) {
 				super.updateItem(obj, empty);
 				if (obj == null) {
+					setGraphic(null);
+					return;
+				}else if(obj.getData() == null) {
 					setGraphic(null);
 					return;
 				}
@@ -189,10 +200,13 @@ public class ListagemPagamentosController implements Initializable {
 		try {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 		Pane pane = loader.load();
-		/*PagamentoFormularioController controller = loader.getController();
+		PagamentoFormularioController controller = loader.getController();
 		controller.setPagamento(obj);
-		controller.setPagamentoService(new PagamentoService());
-		controller.atualizarDadosFormulario();*/
+		controller.setServices(new PagamentoService(), new CriancaService());
+		controller.atualizarDadosFormulario();
+		controller.carregarObjetosAssociados();
+		controller.atualizarDadosFormulario();
+		controller.subscribeDataChangeListener(this);
 		Stage dialogStage = new Stage();
 		dialogStage.setTitle("Entre com os dados de pagamento");
 		dialogStage.setScene(new Scene(pane));
@@ -204,6 +218,12 @@ public class ListagemPagamentosController implements Initializable {
 			e.printStackTrace();
 			Alerts.showAlert("IO Exception", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	@Override
+	public void onDataChanged() {
+		List<Pagamento> pagamentos = pagamentoService.findAll();
+		atualizarListagemPagamentos(pagamentos);
 	}
 	
 }
