@@ -32,6 +32,7 @@ public class Utils {
 	
 	public static Double tryParseToDouble(String str) {
 		try {
+			Locale.setDefault(Locale.US);
 			return Double.parseDouble(str);
 		} catch (NumberFormatException e) {
 			return null;
@@ -57,8 +58,16 @@ public class Utils {
 		});
 	}
 
-	public static String formatarValor(Double valor) {
+	public static String formatarValorPt(Double valor) {
 		NumberFormat formatter = NumberFormat.getInstance(new Locale("pt"));
+		formatter.setMaximumFractionDigits(2);
+		formatter.setMinimumFractionDigits(2);
+		String valorString = formatter.format(valor);
+		return valorString;
+	}
+	
+	public static String formatarValorUs(String valor) {
+		NumberFormat formatter = NumberFormat.getInstance(Locale.US);
 		formatter.setMaximumFractionDigits(2);
 		formatter.setMinimumFractionDigits(2);
 		String valorString = formatter.format(valor);

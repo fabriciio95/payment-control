@@ -34,4 +34,11 @@ public class PagamentoService {
 		return pagamentos;
 	}
 	
+	public Double totalValorPago(List<Pagamento> pagamentos) {
+		Double totalValorPago = 0.0;
+		for(Pagamento pagamento : pagamentos) {
+			totalValorPago += pagamento.getValorPago();
+		}
+		return totalValorPago;
+	}
 }

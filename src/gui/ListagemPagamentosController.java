@@ -25,6 +25,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -51,6 +52,8 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 	private Button btPesquisar;
 	@FXML
 	private Button resetarPesquisa;
+	@FXML
+	private Label totalValorPagoLabel;
 	@FXML
 	private TableView<Pagamento> tableViewPagamento;
 	private ObservableList<Pagamento> pagamentoOBSList;
@@ -100,6 +103,7 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 		this.tableViewPagamento.setItems(pagamentoOBSList);
 		initEditButtons();
 		initRemoveButtons();
+		this.totalValorPagoLabel.setText("");
 	}
 	
 	@FXML
@@ -115,7 +119,12 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 		}
 		List<Pagamento> pagamentos = pagamentoService.pesquisarCrianca(comboBoxPesquisa.getValue(), txtPesquisa.getText());
 		atualizarListagemPagamentos(pagamentos);
-		this.txtPesquisa.setText("");
+		if(comboBoxPesquisa.getValue().equals("Mês")) {
+			Double totalValorPago = pagamentoService.totalValorPago(pagamentos);
+			this.totalValorPagoLabel.setText("Total recebido no mês: " + Utils.formatarValorPt(totalValorPago));
+		}else {
+			this.txtPesquisa.setText("");
+		}
 	}
 	
 	@FXML
@@ -126,6 +135,7 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 		List<Pagamento> pagamentos = pagamentoService.findAll();
 		atualizarListagemPagamentos(pagamentos);
 		this.txtPesquisa.setText("");
+		this.totalValorPagoLabel.setText("");
 	}
 	
 	@FXML
@@ -203,7 +213,6 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 		PagamentoFormularioController controller = loader.getController();
 		controller.setPagamento(obj);
 		controller.setServices(new PagamentoService(), new CriancaService());
-		controller.atualizarDadosFormulario();
 		controller.carregarObjetosAssociados();
 		controller.atualizarDadosFormulario();
 		controller.subscribeDataChangeListener(this);

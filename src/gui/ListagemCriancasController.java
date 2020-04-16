@@ -24,6 +24,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -49,6 +50,8 @@ public class ListagemCriancasController implements Initializable, DataChangeList
 	private Button btPesquisa;
 	@FXML
 	private Button btResetarPesquisa;
+	@FXML
+	private Label labelTotalCriancas;
 	@FXML
 	private TableView<Crianca> tableViewCrianca;
 	private ObservableList<Crianca> CriancaOBSList;
@@ -115,6 +118,7 @@ public class ListagemCriancasController implements Initializable, DataChangeList
 		List<Crianca> listaCrianca = criancaService.pesquisarCrianca(cbPesquisa.getValue(), txtPesquisa.getText());
 		atualizarListagemCriancas(listaCrianca);
 		this.txtPesquisa.setText("");
+		this.labelTotalCriancas.setText("");
 	}
 
 	@FXML
@@ -130,6 +134,7 @@ public class ListagemCriancasController implements Initializable, DataChangeList
 		if (criancaService == null) {
 			throw new IllegalStateException("CriancaService estava null");
 		}
+		this.labelTotalCriancas.setText("Total de crianças: " + String.valueOf(listaCrianca.size()));
 		CriancaOBSList = FXCollections.observableArrayList(listaCrianca);
 		tableViewCrianca.setItems(CriancaOBSList);
 		initEditButtons();

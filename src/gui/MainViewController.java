@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -16,6 +17,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import model.entities.Crianca;
 import model.entities.Pagamento;
@@ -30,9 +33,14 @@ public class MainViewController implements Initializable {
 	private MenuItem menuItemPagamentos;
 	@FXML
 	private MenuItem menuItemSobre;
+	@FXML
+	private ImageView imageView;
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		File file = new File("C:\\temp\\van-escolar-van.jpg");
+		Image image = new Image(file.toURI().toString());
+		imageView.setImage(image);
 	}
 	
 	@FXML

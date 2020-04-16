@@ -12,16 +12,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="545.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ListagemPagamentosController">
+<VBox prefHeight="544.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ListagemPagamentosController">
    <children>
-      <Label text="Pagamentos">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-         <VBox.margin>
-            <Insets left="5.0" top="5.0" />
-         </VBox.margin>
-      </Label>
+      <AnchorPane prefHeight="35.0" prefWidth="941.0">
+         <children>
+            <Label text="Pagamentos">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="totalValorPagoLabel" layoutX="508.0" layoutY="6.0" textFill="#645699">
+               <font>
+                  <Font name="Arial Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
          <items>
             <AnchorPane prefHeight="30.0" prefWidth="917.0">
@@ -35,7 +44,7 @@
             </AnchorPane>
          </items>
       </ToolBar>
-      <TableView fx:id="tableViewPagamento" prefHeight="477.0" prefWidth="941.0">
+      <TableView fx:id="tableViewPagamento" prefHeight="430.0" prefWidth="941.0">
         <columns>
           <TableColumn fx:id="tableColumnNomeCrianca" prefWidth="175.0" text="Criança" />
           <TableColumn fx:id="tableColumnResponsavel" prefWidth="254.0" text="Responsável" />

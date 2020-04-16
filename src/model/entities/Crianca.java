@@ -88,7 +88,7 @@ public class Crianca implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Crianca [idCrianca=" + idCrianca + ", nome=" + nome + ", escola=" + escola + ", anoEscolar="
-				+ anoEscolar + ", responsavel=" + responsavel + ", periodo=" + periodo + ", telefone=" + telefone + "]";
+		return nome;/* "Crianca [idCrianca=" + idCrianca + ", nome=" + nome + ", escola=" + escola + ", anoEscolar="
+				+ anoEscolar + ", responsavel=" + responsavel + ", periodo=" + periodo + ", telefone=" + telefone + "]";*/
 	}
 }

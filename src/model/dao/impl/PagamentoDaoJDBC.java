@@ -56,7 +56,7 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 	public void update(Pagamento obj) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE pag_pagamento SET pag_valor_pago = ? SET pag_data = ?, SET cri_cod_crianca = ? "
+			st = conn.prepareStatement("UPDATE pag_pagamento SET pag_valor_pago = ?, pag_data = ?, cri_cod_crianca = ? "
 					+ "WHERE pag_cod_pagamento = ?;");
 			st.setDouble(1, obj.getValorPago());
 			st.setDate(2, new java.sql.Date(obj.getData().getTime()));
@@ -93,24 +93,24 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 		ResultSet rs = null;
 		try {
 			if(filtroBusca.equals("Criança")) {
-			st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_data,"
-					+ " pag.pag_valor_pago FROM cri_crianca cri INNER JOIN pag_pagamento"
+			st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_cod_pagamento, pag.pag_data,"
+					+ " pag.pag_valor_pago, pag.cri_cod_crianca FROM cri_crianca cri INNER JOIN pag_pagamento"
 					+ " pag ON cri.cri_cod_crianca = pag.cri_cod_crianca and LOWER(cri.cri_nome)"
 					+ " LIKE LOWER(CONCAT('%',?,'%')); ");
 			st.setString(1, buscar);
 			rs = st.executeQuery();
 			pagamentos = executeQueryRS(rs);
 			} else if(filtroBusca.equals("Responsável")) {
-				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_data,"
-						+ " pag.pag_valor_pago FROM cri_crianca cri INNER JOIN pag_pagamento"
+				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_cod_pagamento, pag.pag_data,"
+						+ " pag.pag_valor_pago, pag.cri_cod_crianca FROM cri_crianca cri INNER JOIN pag_pagamento"
 						+ " pag ON cri.cri_cod_crianca = pag.cri_cod_crianca and LOWER(cri.cri_responsavel)"
 						+ " LIKE LOWER(CONCAT('%',?,'%')); ");
 				st.setString(1, buscar);
 				rs = st.executeQuery();
 				pagamentos = executeQueryRS(rs);
 			} else if(filtroBusca.equals("Mês")) {
-				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_data,"
-						+ " pag.pag_valor_pago FROM cri_crianca cri LEFT JOIN pag_pagamento pag"
+				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_cod_pagamento, pag.pag_data,"
+						+ " pag.pag_valor_pago, pag.cri_cod_crianca FROM cri_crianca cri LEFT JOIN pag_pagamento pag"
 						+ " ON cri.cri_cod_crianca = pag.cri_cod_crianca and MONTH(pag.pag_data) = ?;");
 				st.setInt(1, Integer.parseInt(buscar));
 				rs = st.executeQuery();
@@ -129,10 +129,16 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 		List<Pagamento> pagamentos = new ArrayList<Pagamento>();
 		while(rs.next()) {
 			Pagamento pagamento = new Pagamento();
+			pagamento.setIdPagamento(rs.getInt("pag_cod_pagamento"));
 			pagamento.setNomeCrianca(rs.getString("cri_nome"));
 			pagamento.setResponsavelCrianca(rs.getString("cri_responsavel"));
-			pagamento.setData(rs.getDate("pag_data"));
+			if(rs.getDate("pag_data") != null) {
+				pagamento.setData(new java.util.Date(rs.getTimestamp("pag_data").getTime()));
+			}
 			pagamento.setValorPago(rs.getDouble("pag_valor_pago"));
+			CriancaService criService = new CriancaService();
+			Crianca crianca = criService.recuperarCriancaPorId(rs.getInt("cri_cod_crianca"));
+			pagamento.setCrianca(crianca);
 			pagamentos.add(pagamento);
 		}
 		
@@ -151,7 +157,7 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 				Pagamento pagamento = new Pagamento();
 				pagamento.setValorPago(rs.getDouble("pag_valor_pago"));
 				pagamento.setIdPagamento(rs.getInt("pag_cod_pagamento"));
-				pagamento.setData(rs.getDate("pag_data"));
+				pagamento.setData(new java.util.Date(rs.getTimestamp("pag_data").getTime()));
 				CriancaService criancaService = new CriancaService();
 				Crianca crianca = criancaService.recuperarCriancaPorId(rs.getInt("cri_cod_crianca"));
 				pagamento.setCrianca(crianca);

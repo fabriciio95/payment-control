@@ -37,6 +37,14 @@
                   <Button fx:id="btResetarPesquisa" layoutX="680.0" layoutY="5.0" mnemonicParsing="false" onAction="#onBtResetarPesquisaAction" text="Resetar" />
                </children>
             </AnchorPane>
+            <Label fx:id="labelTotalCriancas" textFill="#7e7db9">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+            </Label>
          </items>
       </ToolBar>
       <TableView fx:id="tableViewCrianca" prefHeight="240.0" prefWidth="700.0">

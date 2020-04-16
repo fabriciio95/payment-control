@@ -15,7 +15,6 @@ import java.util.Set;
 import db.DbException;
 import gui.listeners.DataChangeListener;
 import gui.utils.Alerts;
-import gui.utils.Constraints;
 import gui.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -111,13 +110,16 @@ public class PagamentoFormularioController implements Initializable {
 			cbCrianca.setValue(pagamento.getCrianca());
 		}
 		
-		if(datePickerDataPag.getValue() != null) {
+		if(pagamento.getData() != null) {
 			datePickerDataPag.setValue(LocalDate.ofInstant(pagamento.getData().toInstant(), ZoneId.systemDefault()));
 		}
-		Locale.setDefault(new Locale("pt"));
-		txtValorPago.setText(String.format("%.2f",pagamento.getValorPago()));
-	}
-	
+		
+		if(pagamento.getValorPago() != null) {
+			Locale.setDefault(new Locale("pt"));
+			this.txtValorPago.setText(String.format("%.2f",pagamento.getValorPago()));
+		}
+	 }
+		
 	
 	
 	public void setServices(PagamentoService pagamentoService, CriancaService criancaService) {
@@ -130,7 +132,6 @@ public class PagamentoFormularioController implements Initializable {
 	}
 	
 	public void initializeNodes() {
-		Constraints.setTextFieldDouble(txtValorPago);
 		Utils.formatDatePicker(datePickerDataPag, "dd/MM/yyyy");
 		initializeComboBoxCrianca();
 	}
@@ -151,8 +152,7 @@ public class PagamentoFormularioController implements Initializable {
 		if(txtValorPago.getText() == null || txtValorPago.getText().trim().equals("")) {
 			validationException.addError("valorPago", "*Campo não pode estar vazio");
 		}
-		pagamento.setValorPago(Utils.tryParseToDouble(txtValorPago.getText()));
-		
+		pagamento.setValorPago(Utils.tryParseToDouble(txtValorPago.getText().replace(".",",").replace(",",".")));
 		if(validationException.getErrors().size() > 0) {
 			throw validationException;
 		}
