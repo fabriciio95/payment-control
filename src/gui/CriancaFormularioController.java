@@ -35,13 +35,19 @@ public class CriancaFormularioController implements Initializable {
 	@FXML
 	private TextField txtNome;
 	@FXML
+	private TextField txtIdade;
+	@FXML
 	private TextField txtEscola;
 	@FXML
 	private TextField txtAnoEscolar;
 	@FXML
 	private TextField txtResponsavel;
 	@FXML
+	private TextField txtResponsavel2;
+	@FXML
 	private TextField txtTelefone;
+	@FXML
+	private TextField txtTelefone2;
 	@FXML
 	private ComboBox<String> comboBoxPeriodo;
 	private ObservableList<String> OBScbPeriodo = FXCollections.observableArrayList("Manhã", "Tarde", "Integral");
@@ -51,6 +57,8 @@ public class CriancaFormularioController implements Initializable {
 	private Button btCancelar;
 	@FXML
 	private Label labelErrorNome;
+	@FXML
+	private Label labelErrorIdade;
 	@FXML
 	private Label labelErrorEscola;
 	@FXML
@@ -66,7 +74,6 @@ public class CriancaFormularioController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		initializeNodes();
-		this.comboBoxPeriodo.setItems(OBScbPeriodo);
 	}
 	
 	
@@ -108,6 +115,9 @@ public class CriancaFormularioController implements Initializable {
 		this.txtAnoEscolar.setText(entidade.getAnoEscolar());
 		this.txtResponsavel.setText(entidade.getResponsavel());
 		this.txtTelefone.setText(String.valueOf(entidade.getTelefone()));
+		this.txtIdade.setText(String.valueOf(entidade.getIdade()));
+		this.txtTelefone2.setText(String.valueOf(entidade.getTelefone2()));
+		this.txtResponsavel2.setText(entidade.getResponsavel2());
 		if(entidade.getPeriodo() == null) {
 			comboBoxPeriodo.getSelectionModel().selectFirst();
 		}
@@ -126,16 +136,23 @@ public class CriancaFormularioController implements Initializable {
 	
 	private void initializeNodes() {
 		Constraints.setTextFieldMaxLength(txtNome, 70);
+		Constraints.setTextFieldMaxLength(txtIdade, 3);
+		Constraints.setTextFieldInteger(txtIdade);
 		Constraints.setTextFieldMaxLength(txtEscola, 70);
 		Constraints.setTextFieldMaxLength(txtAnoEscolar, 50);
 		Constraints.setTextFieldMaxLength(txtResponsavel, 100);
+		Constraints.setTextFieldMaxLength(txtResponsavel2, 100);
 		Constraints.setTextFieldMaxLength(txtTelefone, 15);
 		Constraints.setTextFieldInteger(txtTelefone);
+		Constraints.setTextFieldMaxLength(txtTelefone, 15);
+		Constraints.setTextFieldInteger(txtTelefone2);
+		this.comboBoxPeriodo.setItems(OBScbPeriodo);
 	}
 	
 	private void setErrorMessages(Map<String, String> errors) {
 		Set<String> fields = errors.keySet();
 		this.labelErrorNome.setText(fields.contains("nome") ? errors.get("nome") : "");
+		this.labelErrorIdade.setText(fields.contains("idade") ? errors.get("idade") : "");
 		this.labelErrorEscola.setText(fields.contains("escola") ? errors.get("escola") : "");
 		this.labelErrorAnoEscolar.setText(fields.contains("anoEscolar") ? errors.get("anoEscolar") : "");
 		this.labelErrorResponsavel.setText(fields.contains("responsavel") ? errors.get("responsavel") : "");
@@ -150,6 +167,10 @@ public class CriancaFormularioController implements Initializable {
 			validationException.addError("nome", "*Campo não pode estar vazio");
 		}
 		obj.setNome(this.txtNome.getText());
+		if(Utils.tryParseToInt(this.txtIdade.getText()) == null) {
+			validationException.addError("idade", "*Campo esta vazio ou a idade está incorreta");
+		}
+		obj.setIdade(Utils.tryParseToInt(this.txtIdade.getText()));
 		if(this.txtEscola.getText() == null || this.txtEscola.getText().trim().equals("")) {
 			validationException.addError("escola", "*Campo não pode estar vazio");
 		}
@@ -170,7 +191,14 @@ public class CriancaFormularioController implements Initializable {
 			validationException.addError("periodo", "*Campo não pode estar vazio");
 		}
 		obj.setPeriodo(comboBoxPeriodo.getValue());
-		
+		if(Utils.tryParseToLong(this.txtTelefone2.getText()) == null) {
+			obj.setTelefone2(0L);
+			System.out.println(obj.getTelefone2() + " Entrou no if");
+		}else {		
+			obj.setTelefone2(Utils.tryParseToLong(this.txtTelefone2.getText()));
+			System.out.println(obj.getTelefone2() + " Não entrou no if");
+		}
+		obj.setResponsavel2(this.txtResponsavel2.getText());
 		if(validationException.getErrors().size() > 0) {
 			throw validationException;
 		}

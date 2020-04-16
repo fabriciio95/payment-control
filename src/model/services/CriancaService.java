@@ -43,7 +43,6 @@ public class CriancaService {
 	}
 	
 	public Crianca recuperarCriancaPorId(Integer id) {
-		//return criancaDao.findById(id);
 		List<Crianca> criancas = criancaDao.findAll();
 		Optional<Crianca> criancaCapturado = criancas.stream().filter(crianca -> crianca.getIdCrianca().equals(id)).findFirst();
 		if(criancaCapturado.isPresent()) {

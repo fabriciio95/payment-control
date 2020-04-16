@@ -58,9 +58,15 @@ public class ListagemCriancasController implements Initializable, DataChangeList
 	@FXML
 	private TableColumn<Crianca, String> tableColumnNome;
 	@FXML
+	private TableColumn<Crianca, Integer> tableColumnIdade;
+	@FXML
 	private TableColumn<Crianca, String> tableColumnResponsavel;
 	@FXML
+	private TableColumn<Crianca, String> tableColumnResponsavel2;
+	@FXML
 	private TableColumn<Crianca, Long> tableColumnTelefone;
+	@FXML
+	private TableColumn<Crianca, Long> tableColumnTelefone2;
 	@FXML
 	private TableColumn<Crianca, String> tableColumnEscola;
 	@FXML
@@ -83,8 +89,11 @@ public class ListagemCriancasController implements Initializable, DataChangeList
 
 	private void initializeNodes() {
 		tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+		tableColumnIdade.setCellValueFactory(new PropertyValueFactory<>("idade"));
 		tableColumnResponsavel.setCellValueFactory(new PropertyValueFactory<>("responsavel"));
+		tableColumnResponsavel2.setCellValueFactory(new PropertyValueFactory<>("responsavel2"));
 		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+		tableColumnTelefone2.setCellValueFactory(new PropertyValueFactory<>("telefone2"));
 		tableColumnEscola.setCellValueFactory(new PropertyValueFactory<>("escola"));
 		tableColumnAno.setCellValueFactory(new PropertyValueFactory<>("anoEscolar"));
 		tableColumnPeriodo.setCellValueFactory(new PropertyValueFactory<>("periodo"));

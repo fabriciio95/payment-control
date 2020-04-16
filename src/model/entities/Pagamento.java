@@ -9,6 +9,7 @@ public class Pagamento {
 	private Date data;
 	private String nomeCrianca;
 	private String responsavelCrianca;
+	private String responsavelCrianca2;
 	private Crianca crianca;
 	
 	public Pagamento() {
@@ -92,6 +93,14 @@ public class Pagamento {
 
 	public void setNomeCrianca(String nomeCrianca) {
 		this.nomeCrianca = nomeCrianca;
+	}
+
+	public String getResponsavelCrianca2() {
+		return responsavelCrianca2;
+	}
+
+	public void setResponsavelCrianca2(String responsavelCrianca2) {
+		this.responsavelCrianca2 = responsavelCrianca2;
 	}
 
 	@Override

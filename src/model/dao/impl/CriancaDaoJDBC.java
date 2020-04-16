@@ -27,15 +27,19 @@ public class CriancaDaoJDBC implements CriancaDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"INSERT INTO cri_crianca (cri_nome,cri_escola,cri_ano_escolar,"
-							+ "cri_responsavel,cri_periodo,cri_telefone ) VALUES (?,?,?,?,?,?);",
+					"INSERT INTO cri_crianca (cri_nome,cri_idade,cri_escola,cri_ano_escolar,"
+							+ "cri_responsavel, cri_responsavel2, cri_periodo,cri_telefone, cri_telefone2) "
+							+ "VALUES (?,?,?,?,?,?,?,?,?);",
 					Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, obj.getNome());
-			st.setString(2, obj.getEscola());
-			st.setString(3, obj.getAnoEscolar());
-			st.setString(4, obj.getResponsavel());
-			st.setString(5, obj.getPeriodo());
-			st.setLong(6, obj.getTelefone());
+			st.setInt(2, obj.getIdade());
+			st.setString(3, obj.getEscola());
+			st.setString(4, obj.getAnoEscolar());
+			st.setString(5, obj.getResponsavel());
+			st.setString(6, obj.getResponsavel2());
+			st.setString(7, obj.getPeriodo());
+			st.setLong(8, obj.getTelefone());
+			st.setLong(9, obj.getTelefone2());
 			int linhasAfetadas = st.executeUpdate();
 			if (linhasAfetadas > 0) {
 				rs = st.getGeneratedKeys();
@@ -58,15 +62,19 @@ public class CriancaDaoJDBC implements CriancaDao {
 	public void update(Crianca obj) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE cri_crianca SET cri_nome = ?, cri_escola = ?,"
-					+ "cri_ano_escolar = ?, cri_responsavel = ?, cri_periodo = ?, cri_telefone = ? WHERE cri_cod_crianca = ?; ");
+			st = conn.prepareStatement("UPDATE cri_crianca SET cri_nome = ?, cri_idade = ?, cri_escola = ?,"
+					+ "cri_ano_escolar = ?, cri_responsavel = ?, cri_responsavel2 = ?, cri_periodo = ?,"
+					+ " cri_telefone = ?, cri_telefone2 = ? WHERE cri_cod_crianca = ?; ");
 			st.setString(1, obj.getNome());
-			st.setString(2, obj.getEscola());
-			st.setString(3, obj.getAnoEscolar());
-			st.setString(4, obj.getResponsavel());
-			st.setString(5, obj.getPeriodo());
-			st.setLong(6, obj.getTelefone());
-			st.setInt(7, obj.getIdCrianca());
+			st.setInt(2, obj.getIdade());
+			st.setString(3, obj.getEscola());
+			st.setString(4, obj.getAnoEscolar());
+			st.setString(5, obj.getResponsavel());
+			st.setString(6, obj.getResponsavel2());
+			st.setString(7, obj.getPeriodo());
+			st.setLong(8, obj.getTelefone());
+			st.setLong(9, obj.getTelefone2());
+			st.setInt(10, obj.getIdCrianca());
 			st.execute();
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -132,11 +140,18 @@ public class CriancaDaoJDBC implements CriancaDao {
 			if (rs.next()) {
 				crianca.setIdCrianca(rs.getInt("cri_cod_crianca"));
 				crianca.setNome(rs.getString("cri_nome"));
+				crianca.setIdade(rs.getInt("cri_idade"));
 				crianca.setEscola(rs.getString("cri_escola"));
 				crianca.setAnoEscolar(rs.getString("cri_ano_escolar"));
 				crianca.setResponsavel(rs.getString("cri_responsavel"));
+				crianca.setResponsavel2(rs.getString("cri_responsavel2"));
 				crianca.setPeriodo(rs.getString("cri_periodo"));
 				crianca.setTelefone(rs.getLong("cri_telefone"));
+				if(rs.getLong("cri_telefone2") == 0) {
+					crianca.setTelefone2(null);
+				}else {
+					crianca.setTelefone2(rs.getLong("cri_telefone2"));
+				}
 			}
 			return crianca;
 		} catch (SQLException e) {
@@ -161,8 +176,11 @@ public class CriancaDaoJDBC implements CriancaDao {
 				criancas = executeQueryRS(rs);
 			} else if (filtroBusca.equals("Responsável")) {
 				st = conn.prepareStatement(
-						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_responsavel) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY cri_responsavel;");
+						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_responsavel)"
+						+ " LIKE LOWER(CONCAT('%',?,'%')) OR LOWER(cri.cri_responsavel2)"
+						+ " LIKE LOWER(CONCAT('%',?,'%'))  ORDER BY cri_responsavel;");
 				st.setString(1, buscar);
+				st.setString(2, buscar);
 				rs = st.executeQuery();
 				criancas = executeQueryRS(rs);
 			} else if (filtroBusca.equals("Período")) {
@@ -193,11 +211,18 @@ public class CriancaDaoJDBC implements CriancaDao {
 			Crianca crianca = new Crianca();
 			crianca.setIdCrianca(rs.getInt("cri_cod_crianca"));
 			crianca.setNome(rs.getString("cri_nome"));
+			crianca.setIdade(rs.getInt("cri_idade"));
 			crianca.setEscola(rs.getString("cri_escola"));
 			crianca.setAnoEscolar(rs.getString("cri_ano_escolar"));
 			crianca.setResponsavel(rs.getString("cri_responsavel"));
+			crianca.setResponsavel2(rs.getString("cri_responsavel2"));
 			crianca.setPeriodo(rs.getString("cri_periodo"));
 			crianca.setTelefone(rs.getLong("cri_telefone"));
+			if(rs.getLong("cri_telefone2") == 0) {
+				crianca.setTelefone2(null);
+			}else {
+				crianca.setTelefone2(rs.getLong("cri_telefone2"));
+			}
 			criancas.add(crianca);
 		}
 		return criancas;

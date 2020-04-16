@@ -30,6 +30,15 @@ public class Utils {
 		}
 	}
 	
+	public static Integer tryParseToInt(String str) {
+		try {
+			Locale.setDefault(Locale.US);
+			return Integer.parseInt(str) == 0 ? null : Integer.parseInt(str);
+		} catch(NumberFormatException e) {
+			return null;
+		}
+	}
+	
 	public static Double tryParseToDouble(String str) {
 		try {
 			Locale.setDefault(Locale.US);
