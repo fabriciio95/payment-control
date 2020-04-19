@@ -193,10 +193,8 @@ public class CriancaFormularioController implements Initializable {
 		obj.setPeriodo(comboBoxPeriodo.getValue());
 		if(Utils.tryParseToLong(this.txtTelefone2.getText()) == null) {
 			obj.setTelefone2(0L);
-			System.out.println(obj.getTelefone2() + " Entrou no if");
 		}else {		
 			obj.setTelefone2(Utils.tryParseToLong(this.txtTelefone2.getText()));
-			System.out.println(obj.getTelefone2() + " Não entrou no if");
 		}
 		obj.setResponsavel2(this.txtResponsavel2.getText());
 		if(validationException.getErrors().size() > 0) {

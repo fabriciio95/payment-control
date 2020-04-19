@@ -115,19 +115,39 @@ public class ListagemCriancasController implements Initializable, DataChangeList
 
 	@FXML
 	public void onBtPesquisarAction() {
+		String msgErro = "";
+		try {
 		if (criancaService == null) {
-			throw new IllegalStateException("CriancaService estava null");
+			msgErro = "CriancaService estava null";
+			throw new IllegalStateException();
 		}
 		if(cbPesquisa.getValue() == null) {
-			Alerts.showAlert("Erro", null, "Nenhuma opção de pesquisa escolhida, por favor selecione uma opção e tente novamente!", AlertType.ERROR);
+			msgErro = "Nenhuma opção de pesquisa escolhida, por favor selecione uma opção e tente novamente!";
+			throw new IllegalStateException();
 		}
 		if(txtPesquisa.getText() == null || txtPesquisa.getText().equals("")) {
-			Alerts.showAlert("Erro", null, "Campo de pesquisa vazio, digite algo no campo para realizar a pesquisa!", AlertType.ERROR);
+			msgErro = "Campo de pesquisa vazio, digite algo no campo para realizar a pesquisa!";
+			throw new IllegalStateException();
 		}
 		List<Crianca> listaCrianca = criancaService.pesquisarCrianca(cbPesquisa.getValue(), txtPesquisa.getText());
 		atualizarListagemCriancas(listaCrianca);
+		if(cbPesquisa.getValue().equalsIgnoreCase("Período")) {
+			if(criancaService.ehPesquisaPorPeriodo(listaCrianca, "Manhã")) {
+				this.labelTotalCriancas.setText("Total de Manhã: " + String.valueOf(listaCrianca.size()));
+			}else if(criancaService.ehPesquisaPorPeriodo(listaCrianca, "Tarde")) {
+				this.labelTotalCriancas.setText("Total de Tarde: " + String.valueOf(listaCrianca.size()));
+			}else if(criancaService.ehPesquisaPorPeriodo(listaCrianca, "Integral")) {
+				this.labelTotalCriancas.setText("Total de Integral: " + String.valueOf(listaCrianca.size()));
+			}else {
+				this.labelTotalCriancas.setText("");
+			}
+		}else {
+			this.labelTotalCriancas.setText("");
+		}
 		this.txtPesquisa.setText("");
-		this.labelTotalCriancas.setText("");
+		}catch(IllegalStateException e) {
+			Alerts.showAlert("Erro", null, msgErro, AlertType.ERROR);
+		}
 	}
 
 	@FXML

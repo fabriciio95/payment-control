@@ -32,17 +32,28 @@ public class MainViewController implements Initializable {
 	@FXML
 	private MenuItem menuItemPagamentos;
 	@FXML
-	private MenuItem menuItemSobre;
+	private MenuItem menuItemBD;
 	@FXML
 	private ImageView imageView;
-	
+	private Scene primaryScene;
+
+	public MainViewController(Scene mainScene) {
+		this.setPrimaryScene(mainScene);
+	}
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		File file = new File("C:\\temp\\van-escolar-van.jpg");
+		initializeNodes();
+	}
+
+	private void initializeNodes() {
+		File file = new File("C:\\Program Files\\SistemaTransporteEscolar\\transporteEscolar.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
+		imageView.fitWidthProperty().bind(primaryScene.widthProperty());
+		imageView.fitHeightProperty().bind(primaryScene.heightProperty());
 	}
-	
+
 	@FXML
 	public void onMenuItemCriancasAction() {
 		this.loadView("/gui/ListagemCriancas.fxml", (ListagemCriancasController controller) -> {
@@ -52,7 +63,7 @@ public class MainViewController implements Initializable {
 			controller.atualizarListagemCriancas(listaCrianca);
 		});
 	}
-	
+
 	@FXML
 	public void onMenuItemPagamentosAction() {
 		this.loadView("/gui/ListagemPagamentos.fxml", (ListagemPagamentosController controller) -> {
@@ -62,29 +73,38 @@ public class MainViewController implements Initializable {
 			controller.atualizarListagemPagamentos(listaPagamentos);
 		});
 	}
-	
+
 	@FXML
-	public void onMenuItemSobreAction() {
-		System.out.println("onMenuItemSobreAction()");
+	public void onMenuItemBDAction() {
+		this.loadView("/gui/ManutencaoBD.fxml", (ManutencaoBDController controller) -> {
+			controller.setServices(new PagamentoService(), new CriancaService());
+		});
 	}
-	
+
 	private synchronized <T> void loadView(String absoluteName, Consumer<T> initializingAction) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			VBox newVbox = loader.load();
 			Scene mainScene = Main.getMainScene();
-			VBox mainVbox =(VBox)((ScrollPane) mainScene.getRoot()).getContent();
+			VBox mainVbox = (VBox) ((ScrollPane)mainScene.getRoot()).getContent();
 			Node mainMenu = mainVbox.getChildren().get(0);
 			mainVbox.getChildren().clear();
 			mainVbox.getChildren().add(mainMenu);
 			mainVbox.getChildren().addAll(newVbox.getChildren());
 			T controller = loader.getController();
 			initializingAction.accept(controller);
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			Alerts.showAlert("IO Exception", "Erro ao carregar tela", e.getMessage(), AlertType.ERROR);
 		}
 	}
-	
+
+	public Scene getPrimaryScene() {
+		return primaryScene;
+	}
+
+	public void setPrimaryScene(Scene primaryScene) {
+		this.primaryScene = primaryScene;
+	}
 
 }

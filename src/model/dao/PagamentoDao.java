@@ -11,5 +11,6 @@ public interface PagamentoDao {
 	void deleteById(Integer id);
 	List<Pagamento> pesquisarPor(String filtroBusca, String buscar);
 	List<Pagamento> findAll();
+	Integer deleteAll();
 
 }

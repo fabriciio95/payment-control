@@ -149,8 +149,8 @@ public class PagamentoFormularioController implements Initializable {
 			validationException.addError("crianca", "*Campo não pode estar vazio");
 		}
 		pagamento.setCrianca(cbCrianca.getValue());
-		if(txtValorPago.getText() == null || txtValorPago.getText().trim().equals("")) {
-			validationException.addError("valorPago", "*Campo não pode estar vazio");
+		if(txtValorPago.getText() == null || txtValorPago.getText().trim().equals("") || Utils.tryParseToDouble(txtValorPago.getText().replace(".",",").replace(",",".")) == null) {
+			validationException.addError("valorPago", "*Campo esta vazio ou o valor é inválido");
 		}
 		pagamento.setValorPago(Utils.tryParseToDouble(txtValorPago.getText().replace(".",",").replace(",",".")));
 		if(validationException.getErrors().size() > 0) {

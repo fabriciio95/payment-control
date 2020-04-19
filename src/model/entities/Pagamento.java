@@ -10,15 +10,24 @@ public class Pagamento {
 	private String nomeCrianca;
 	private String responsavelCrianca;
 	private String responsavelCrianca2;
+	private Long telefone;
+	private Long telefone2;
 	private Crianca crianca;
 	
 	public Pagamento() {
 	}
 
-	public Pagamento(Integer idPagamento, Double valorPago, Date data, Crianca crianca) {
+	public Pagamento(Integer idPagamento, Double valorPago, Date data, String nomeCrianca, String responsavelCrianca,
+			String responsavelCrianca2, Long telefone, Long telefone2, Crianca crianca) {
+		super();
 		this.idPagamento = idPagamento;
 		this.valorPago = valorPago;
 		this.data = data;
+		this.nomeCrianca = nomeCrianca;
+		this.responsavelCrianca = responsavelCrianca;
+		this.responsavelCrianca2 = responsavelCrianca2;
+		this.telefone = telefone;
+		this.telefone2 = telefone2;
 		this.crianca = crianca;
 	}
 
@@ -103,12 +112,28 @@ public class Pagamento {
 		this.responsavelCrianca2 = responsavelCrianca2;
 	}
 
+	public Long getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(Long telefone) {
+		this.telefone = telefone;
+	}
+
+	public Long getTelefone2() {
+		return telefone2;
+	}
+
+	public void setTelefone2(Long telefone2) {
+		this.telefone2 = telefone2;
+	}
+
 	@Override
 	public String toString() {
 		return "Pagamento [idPagamento=" + idPagamento + ", valorPago=" + valorPago + ", data=" + data
-				+ ", nomeCrianca=" + nomeCrianca + ", responsavelCrianca=" + responsavelCrianca + ", crianca=" + crianca
-				+ "]";
+				+ ", nomeCrianca=" + nomeCrianca + ", responsavelCrianca=" + responsavelCrianca
+				+ ", responsavelCrianca2=" + responsavelCrianca2 + ", telefone=" + telefone + ", telefone2=" + telefone2
+				+ ", crianca=" + crianca + "]";
 	}
-
 	
 }

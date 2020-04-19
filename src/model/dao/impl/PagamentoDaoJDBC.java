@@ -87,32 +87,39 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 	}
 
 	@Override
-	public List<Pagamento> pesquisarPor(String filtroBusca, String buscar) {
+	public List<Pagamento> pesquisarPor(String filtroBusca, String itemBusca) {
 		List<Pagamento> pagamentos = new ArrayList<Pagamento>();
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
 			if(filtroBusca.equals("Criança")) {
-			st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_cod_pagamento, pag.pag_data,"
+			st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, cri.cri_responsavel2,"
+					+ " cri.cri_telefone, cri.cri_telefone2, pag.pag_cod_pagamento, pag.pag_data,"
 					+ " pag.pag_valor_pago, pag.cri_cod_crianca FROM cri_crianca cri INNER JOIN pag_pagamento"
 					+ " pag ON cri.cri_cod_crianca = pag.cri_cod_crianca and LOWER(cri.cri_nome)"
 					+ " LIKE LOWER(CONCAT('%',?,'%')); ");
-			st.setString(1, buscar);
+			st.setString(1, itemBusca);
 			rs = st.executeQuery();
 			pagamentos = executeQueryRS(rs);
 			} else if(filtroBusca.equals("Responsável")) {
-				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_cod_pagamento, pag.pag_data,"
-						+ " pag.pag_valor_pago, pag.cri_cod_crianca FROM cri_crianca cri INNER JOIN pag_pagamento"
-						+ " pag ON cri.cri_cod_crianca = pag.cri_cod_crianca and LOWER(cri.cri_responsavel)"
-						+ " LIKE LOWER(CONCAT('%',?,'%')); ");
-				st.setString(1, buscar);
+				st = conn.prepareStatement("SELECT cri.cri_cod_crianca, cri.cri_nome, cri.cri_responsavel,"
+						+ " cri.cri_responsavel2, cri.cri_telefone, cri.cri_telefone2,"
+						+ " pag.pag_cod_pagamento, pag.pag_data, pag.pag_valor_pago,"
+						+ " pag.cri_cod_crianca FROM cri_crianca cri INNER JOIN pag_pagamento pag"
+						+ " ON cri.cri_cod_crianca = pag.cri_cod_crianca AND (LOWER(cri.cri_responsavel)"
+						+ " LIKE LOWER(CONCAT('%',?,'%')) OR  LOWER(cri.cri_responsavel2)"
+						+ " LIKE LOWER(CONCAT('%',?,'%')));");
+				st.setString(1, itemBusca);
+				st.setString(2, itemBusca);
 				rs = st.executeQuery();
 				pagamentos = executeQueryRS(rs);
 			} else if(filtroBusca.equals("Mês")) {
-				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, pag.pag_cod_pagamento, pag.pag_data,"
-						+ " pag.pag_valor_pago, pag.cri_cod_crianca FROM cri_crianca cri LEFT JOIN pag_pagamento pag"
+				st = conn.prepareStatement("SELECT cri.cri_nome, cri.cri_responsavel, cri.cri_responsavel2,"
+						+ " cri.cri_telefone, cri.cri_telefone2, pag.pag_cod_pagamento, pag.pag_data,"
+						+ " pag.pag_valor_pago, pag.cri_cod_crianca FROM cri_crianca cri"
+						+ " LEFT JOIN pag_pagamento pag"
 						+ " ON cri.cri_cod_crianca = pag.cri_cod_crianca and MONTH(pag.pag_data) = ?;");
-				st.setInt(1, Integer.parseInt(buscar));
+				st.setInt(1, Integer.parseInt(itemBusca));
 				rs = st.executeQuery();
 				pagamentos = executeQueryRS(rs);
 			}
@@ -132,6 +139,13 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 			pagamento.setIdPagamento(rs.getInt("pag_cod_pagamento"));
 			pagamento.setNomeCrianca(rs.getString("cri_nome"));
 			pagamento.setResponsavelCrianca(rs.getString("cri_responsavel"));
+			pagamento.setResponsavelCrianca2(rs.getString("cri_responsavel2"));
+			pagamento.setTelefone(rs.getLong("cri_telefone"));
+			if(rs.getLong("cri_telefone2") == 0) {
+				pagamento.setTelefone2(null);
+			}else {
+				pagamento.setTelefone2(rs.getLong("cri_telefone2"));
+			}
 			if(rs.getDate("pag_data") != null) {
 				pagamento.setData(new java.util.Date(rs.getTimestamp("pag_data").getTime()));
 			}
@@ -163,6 +177,9 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 				pagamento.setCrianca(crianca);
 				pagamento.setNomeCrianca(crianca.getNome());
 				pagamento.setResponsavelCrianca(crianca.getResponsavel());
+				pagamento.setResponsavelCrianca2(crianca.getResponsavel2());
+				pagamento.setTelefone(crianca.getTelefone());
+				pagamento.setTelefone2(crianca.getTelefone2());
 				pagamentos.add(pagamento);
 			}
 			return pagamentos;
@@ -174,4 +191,16 @@ public class PagamentoDaoJDBC implements PagamentoDao {
 		}
 	}
 
+	public Integer deleteAll() {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("DELETE FROM pag_pagamento;");
+			Integer deletesPagamento = st.executeUpdate();
+			return deletesPagamento;
+		}catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+		}
+	}
 }

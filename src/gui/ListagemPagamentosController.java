@@ -62,6 +62,12 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 	@FXML
 	private TableColumn<Crianca, String> tableColumnResponsavel;
 	@FXML
+	private TableColumn<Crianca, String> tableColumnResponsavel2;
+	@FXML
+	private TableColumn<Crianca, Long> tableColumnTelefone;
+	@FXML
+	private TableColumn<Crianca, Long> tableColumnTelefone2;
+	@FXML
 	private TableColumn<Pagamento, Date> tableColumnData;
 	@FXML
 	private TableColumn<Pagamento, Double> tableColumnValorPago;
@@ -88,6 +94,9 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewPagamento.prefHeightProperty().bind(stage.heightProperty());
 		Constraints.setTextFieldMaxLength(txtPesquisa, 100);
+		tableColumnResponsavel2.setCellValueFactory(new PropertyValueFactory<>("responsavelCrianca2"));
+		tableColumnTelefone.setCellValueFactory(new PropertyValueFactory<>("telefone"));
+		tableColumnTelefone2.setCellValueFactory(new PropertyValueFactory<>("telefone2"));
 		this.comboBoxPesquisa.setItems(pesquisaCBOBSList);
 	}
 	
@@ -108,15 +117,25 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 	
 	@FXML
 	public void btPesquisarOnAction() {
+		String msgErro = "";
+		try {
 		if (pagamentoService == null) {
-			throw new IllegalStateException("PagamentoService estava null");
+			msgErro = "PagamentoService estava null";
+			throw new IllegalStateException();
 		}
 		if(comboBoxPesquisa.getValue() == null) {
-			Alerts.showAlert("Erro", null, "Nenhuma opção de pesquisa escolhida, por favor selecione uma opção e tente novamente!", AlertType.ERROR);
+			msgErro = "Nenhuma opção de pesquisa escolhida, por favor selecione uma opção e tente novamente!";
+			throw new IllegalStateException("ComboBox estava null");
 		}
 		if(txtPesquisa.getText() == null || txtPesquisa.getText().equals("")) {
-			Alerts.showAlert("Erro", null, "Campo de pesquisa vazio, digite algo no campo para realizar a pesquisa!", AlertType.ERROR);
+			msgErro = "Campo de pesquisa vazio, digite algo no campo para realizar a pesquisa!";
+			throw new IllegalStateException("TxtPesquisa estava null");
 		}
+		if(comboBoxPesquisa.getValue().equalsIgnoreCase("Mês") && (Utils.tryParseToInt(txtPesquisa.getText()) <= 0 || Utils.tryParseToInt(txtPesquisa.getText()) > 12 || Utils.tryParseToInt(txtPesquisa.getText()) == null)){
+			msgErro = "Número de mês inválido, por favor verifique o número digitado e tente novamente!";
+			throw new IllegalStateException();
+		}
+		
 		List<Pagamento> pagamentos = pagamentoService.pesquisarCrianca(comboBoxPesquisa.getValue(), txtPesquisa.getText());
 		atualizarListagemPagamentos(pagamentos);
 		if(comboBoxPesquisa.getValue().equals("Mês")) {
@@ -124,6 +143,11 @@ public class ListagemPagamentosController implements Initializable, DataChangeLi
 			this.totalValorPagoLabel.setText("Total recebido no mês: " + Utils.formatarValorPt(totalValorPago));
 		}else {
 			this.txtPesquisa.setText("");
+		}
+		}catch(NullPointerException e) {
+			Alerts.showAlert("Erro", null, "Número de mês inválido, por favor verifique o número digitado e tente novamente!", AlertType.ERROR);
+		}catch(IllegalStateException e) {
+			Alerts.showAlert("Erro", null, msgErro, AlertType.ERROR);
 		}
 	}
 	

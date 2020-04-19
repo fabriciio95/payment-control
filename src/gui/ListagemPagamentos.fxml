@@ -44,14 +44,25 @@
             </AnchorPane>
          </items>
       </ToolBar>
-      <TableView fx:id="tableViewPagamento" prefHeight="430.0" prefWidth="941.0">
+      <TableView fx:id="tableViewPagamento" opacity="0.93" prefHeight="430.0" prefWidth="941.0">
         <columns>
-          <TableColumn fx:id="tableColumnNomeCrianca" prefWidth="175.0" text="Criança" />
-          <TableColumn fx:id="tableColumnResponsavel" prefWidth="254.0" text="Responsável" />
-            <TableColumn fx:id="tableColumnData" minWidth="0.0" prefWidth="152.0" text="Data" />
-            <TableColumn fx:id="tableColumnValorPago" prefWidth="153.0" text="Valor Pago" />
-            <TableColumn fx:id="tableColumnEDIT" prefWidth="105.0" />
-            <TableColumn fx:id="tableColumnREMOVE" prefWidth="98.0" />
+          <TableColumn fx:id="tableColumnNomeCrianca" minWidth="100.0" prefWidth="175.0" text="Criança" />
+          <TableColumn prefWidth="254.0" text="Responsáveis">
+               <columns>
+                  <TableColumn fx:id="tableColumnResponsavel" minWidth="70.0" prefWidth="75.0" />
+                  <TableColumn fx:id="tableColumnResponsavel2" minWidth="70.0" prefWidth="75.0" />
+               </columns>
+            </TableColumn>
+            <TableColumn prefWidth="75.0" text="Telefones">
+               <columns>
+                  <TableColumn fx:id="tableColumnTelefone" maxWidth="4000.0" minWidth="50.0" prefWidth="75.0" />
+                  <TableColumn fx:id="tableColumnTelefone2" maxWidth="4000.0" minWidth="50.0" prefWidth="75.0" />
+               </columns>
+            </TableColumn>
+            <TableColumn fx:id="tableColumnData" maxWidth="100.0" minWidth="100.0" prefWidth="152.0" text="Data" />
+            <TableColumn fx:id="tableColumnValorPago" maxWidth="100.0" minWidth="100.0" prefWidth="153.0" text="Valor Pago" />
+            <TableColumn fx:id="tableColumnEDIT" maxWidth="70.0" minWidth="70.0" prefWidth="105.0" />
+            <TableColumn fx:id="tableColumnREMOVE" maxWidth="70.0" minWidth="70.0" prefWidth="98.0" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

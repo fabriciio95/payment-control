@@ -163,7 +163,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 	}
 
 	@Override
-	public List<Crianca> pesquisarPor(String filtroBusca, String buscar) {
+	public List<Crianca> pesquisarPor(String filtroBusca, String itemBusca) {
 		List<Crianca> criancas = new ArrayList<Crianca>();
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -171,7 +171,7 @@ public class CriancaDaoJDBC implements CriancaDao {
 			if (filtroBusca.equals("Nome")) {
 				st = conn.prepareStatement(
 						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_nome) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY cri_nome;");
-				st.setString(1, buscar);
+				st.setString(1, itemBusca);
 				rs = st.executeQuery();
 				criancas = executeQueryRS(rs);
 			} else if (filtroBusca.equals("Responsável")) {
@@ -179,20 +179,20 @@ public class CriancaDaoJDBC implements CriancaDao {
 						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_responsavel)"
 						+ " LIKE LOWER(CONCAT('%',?,'%')) OR LOWER(cri.cri_responsavel2)"
 						+ " LIKE LOWER(CONCAT('%',?,'%'))  ORDER BY cri_responsavel;");
-				st.setString(1, buscar);
-				st.setString(2, buscar);
+				st.setString(1, itemBusca);
+				st.setString(2, itemBusca);
 				rs = st.executeQuery();
 				criancas = executeQueryRS(rs);
 			} else if (filtroBusca.equals("Período")) {
 				st = conn.prepareStatement(
 						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_periodo) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY cri_periodo;");
-				st.setString(1, buscar);
+				st.setString(1, itemBusca);
 				rs = st.executeQuery();
 				criancas = executeQueryRS(rs);
 			} else if (filtroBusca.equals("Escola")) {
 				st = conn.prepareStatement(
 						"SELECT * FROM cri_crianca cri WHERE LOWER(cri.cri_escola) LIKE LOWER(CONCAT('%',?,'%')) ORDER BY cri_escola;");
-				st.setString(1, buscar);
+				st.setString(1, itemBusca);
 				rs = st.executeQuery();
 				criancas = executeQueryRS(rs);
 			}
@@ -228,4 +228,28 @@ public class CriancaDaoJDBC implements CriancaDao {
 		return criancas;
 	}
 
+	
+	public Integer deleteAll() {
+		PreparedStatement st = null;
+		PreparedStatement st2 = null;
+		try {
+			conn.setAutoCommit(false);
+			st = conn.prepareStatement("DELETE FROM pag_pagamento;");
+			Integer deletesPagamento = st.executeUpdate();
+			st2 = conn.prepareStatement("DELETE FROM cri_crianca;");
+			Integer deletesCrianca = st2.executeUpdate();
+			conn.commit();
+			return deletesPagamento + deletesCrianca;
+		}catch(SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+			DB.closeStatement(st2);
+		}
+	}
 }

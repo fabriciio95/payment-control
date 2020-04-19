@@ -13,4 +13,5 @@ public interface CriancaDao {
 	Crianca findById(Integer id);
 	List<Crianca> pesquisarPor(String filtroBusca, String buscar);
 	List<Crianca> findAll();
+	Integer deleteAll();
 }

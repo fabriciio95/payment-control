@@ -4,35 +4,30 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="487.0" prefWidth="669.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainViewController">
-	<content>
-		<VBox prefHeight="445.0" prefWidth="664.0">
-			<children>
-				<MenuBar>
-					<menus>
-						<Menu mnemonicParsing="false" text="Opções">
-							<items>
-								<MenuItem fx:id="menuItemCriancas" mnemonicParsing="false" onAction="#onMenuItemCriancasAction" text="Crianças" />
-								<MenuItem fx:id="menuItemPagamentos" mnemonicParsing="false" onAction="#onMenuItemPagamentosAction" text="Pagamentos" />
-							</items>
-						</Menu>
-						<Menu mnemonicParsing="false" text="Ajuda">
-							<items>
-								<MenuItem fx:id="menuItemSobre" mnemonicParsing="false" onAction="#onMenuItemSobreAction" text="Sobre" />
-							</items>
-						</Menu>
-					</menus>
-				</MenuBar>
-            <ImageView fx:id="imageView" fitHeight="459.0" fitWidth="645.0" nodeOrientation="INHERIT" pickOnBounds="true">
-               <image>
-                  <Image url="@../../../van-escolar-van.jpg" />
-               </image>
-            </ImageView>
-			</children>
-		</VBox>
-	</content>
+<ScrollPane prefHeight="462.0" prefWidth="625.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox>
+         <children>
+      				<MenuBar>
+      					<menus>
+      						<Menu mnemonicParsing="false" text="Opções">
+      							<items>
+      								<MenuItem fx:id="menuItemCriancas" mnemonicParsing="false" onAction="#onMenuItemCriancasAction" text="Crianças" />
+      								<MenuItem fx:id="menuItemPagamentos" mnemonicParsing="false" onAction="#onMenuItemPagamentosAction" text="Pagamentos" />
+      							</items>
+      						</Menu>
+      						<Menu mnemonicParsing="false" text="Manutenção">
+      							<items>
+      								<MenuItem fx:id="menuItemBD" mnemonicParsing="false" onAction="#onMenuItemBDAction" text="Banco de Dados" />
+      							</items>
+      						</Menu>
+      					</menus>
+      				</MenuBar>
+            <ImageView fx:id="imageView" fitHeight="52.0" fitWidth="59.0" nodeOrientation="INHERIT" pickOnBounds="true" />
+         </children>
+      </VBox>
+   </content>
 </ScrollPane>
