@@ -29,7 +29,7 @@ O Payment Control é um sistema desktop para controle de pagamentos de mensalida
 - MVC
 
 # Como executar o projeto
-### Pré requesitos:
+### Pré requisitos:
 - Java 11
 - MySQL
 - MySQL WorkBench 8.0
