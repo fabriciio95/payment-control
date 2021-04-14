@@ -47,7 +47,7 @@ public class MainViewController implements Initializable {
 	}
 
 	private void initializeNodes() {
-		File file = new File("C:\\Program Files\\SistemaTransporteEscolar\\transporteEscolar.png");
+		File file = new File(System.getProperty("user.dir") + "\\transporteEscolar.png");
 		Image image = new Image(file.toURI().toString());
 		imageView.setImage(image);
 		imageView.fitWidthProperty().bind(primaryScene.widthProperty());
